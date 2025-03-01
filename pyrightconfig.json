@@ -1,0 +1,11 @@
+{
+    "pythonPlatform": "Linux",
+    "pythonVersion": "3.9",
+    "venvPath": "/usr/local",
+    "venv": "bin",
+    "pythonPath": "/usr/local/bin/python",
+    "reportMissingImports": false,
+    "extraPaths": [
+        "/usr/local/lib/python3.12/site-packages"
+    ]
+}

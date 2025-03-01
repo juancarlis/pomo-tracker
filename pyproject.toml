@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "pomo-tracker"
+version = "0.1.0"
+description = ""
+authors = ["Juan I. Carlis <juancarlis93@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+rich = "^13.9.4"
+typer = "^0.15.2"
+
+
+[tool.poetry.group.dev.dependencies]
+pdbpp = "^0.10.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
