@@ -1,9 +1,9 @@
-from model import Task
+from src.model import Task
 import typer
 from rich.console import Console
 from rich.table import Table
 
-from database import (
+from src.database import (
     get_all_tasks,
     delete_task,
     insert_task,

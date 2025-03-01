@@ -1,7 +1,7 @@
 import sqlite3
 from typing import List
 import datetime
-from model import Task
+from src.model import Task
 
 
 conn = sqlite3.connect("tasks.db")

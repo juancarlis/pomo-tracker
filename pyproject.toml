@@ -2,6 +2,7 @@
 name = "pomo-tracker"
 version = "0.1.0"
 description = ""
+packages = [{ include = "src", from = "." }]
 authors = ["Juan I. Carlis <juancarlis93@gmail.com>"]
 readme = "README.md"
 
@@ -13,6 +14,9 @@ typer = "^0.15.2"
 
 [tool.poetry.group.dev.dependencies]
 pdbpp = "^0.10.3"
+
+[tool.poetry.scripts]
+taskcli = "src.taskcli:app"
 
 [build-system]
 requires = ["poetry-core"]
