@@ -1,3 +1,4 @@
+from src.categories.service import get_all_categories, get_category_id_from_name
 from src.tasks.models import Task
 import typer
 from rich.console import Console
@@ -13,39 +14,45 @@ from src.tasks.service import (
 
 
 console = Console()
-app = typer.Typer()
+task_app = typer.Typer()
 
 
-@app.command(short_help="add an item")
+@task_app.command(short_help="add an item")
 def add(task_description: str, category: str):
+    category_id = get_category_id_from_name(category)
+    if category_id is None:
+        typer.echo(
+            f"Category {category} does not exists. Use `taskcli categories show` to see available."
+        )
+        return
     typer.echo(f"adding {task_description}, {category}")
-    task = Task(task_description, category)
+    task = Task(description=task_description, category_id=category_id)
     insert_task(task)
     show()
 
 
-@app.command()
+@task_app.command()
 def delete(position: int):
     typer.echo(f"deleting {position}")
     delete_task(position - 1)
     show()
 
 
-@app.command()
+@task_app.command()
 def update(position: int, task_description: str = "", category: str = ""):
     typer.echo(f"updating {position}")
     update_task(position - 1, task_description, category)
     show()
 
 
-@app.command()
+@task_app.command()
 def complete(position: int):
     typer.echo(f"complete {position}")
     complete_task(position - 1)
     show()
 
 
-@app.command()
+@task_app.command()
 def show():
     tasks = get_all_tasks()
     console.print("[bold magenta]Tasks[/bold magenta]!", "💻")
@@ -57,21 +64,20 @@ def show():
     table.add_column("Done", min_width=12, justify="right")
 
     for idx, task in enumerate(tasks, start=1):
-        c = get_category_color(task.category)
+        c = get_category_color(task.category_id)
         is_done_str = "✅" if task.status == 1 else "❌"
         table.add_row(
-            str(idx), task.description, f"[{c}]{task.category}[/{c}]", is_done_str
+            str(idx), task.description, f"[{c}]{task.category_id}[/{c}]", is_done_str
         )
 
     console.print(table)
 
 
 def get_category_color(category):
-    COLORS = {"Learn": "cyan", "YouTube": "red", "Sports": "cyan", "Study": "green"}
-    if category in COLORS:
-        return COLORS[category]
-    return "white"
+    """Returns category color"""
+    categories = {category.name: category.color for category in get_all_categories()}
+    return categories.get(category, "white")
 
 
 if __name__ == "__main__":
-    app()
+    task_app()

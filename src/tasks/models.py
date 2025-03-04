@@ -4,15 +4,17 @@ import datetime
 class Task:
     def __init__(
         self,
-        description,
-        category,
+        id=None,
+        description="",
+        category_id=None,
         date_added=None,
         date_completed=None,
         status=None,
         position=None,
     ) -> None:
+        self.id = id
         self.description = description
-        self.category = category
+        self.category_id = category_id
         self.date_added = (
             date_added
             if date_added is not None
@@ -23,4 +25,4 @@ class Task:
         self.position = position if position is not None else None
 
     def __repr__(self) -> str:
-        return f"({self.description}, {self.category}, {self.date_added}, {self.date_completed}, {self.status}, {self.position})"
+        return f"({self.description}, {self.category_id}, {self.date_added}, {self.date_completed}, {self.status}, {self.position})"

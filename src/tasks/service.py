@@ -2,13 +2,28 @@ import sqlite3
 from typing import List
 import datetime
 from src.tasks.models import Task
+from src.categories.service import get_category_id_from_name
 
 conn = sqlite3.connect("tasks.db")
 c = conn.cursor()
 
 
 def get_all_tasks() -> List[Task]:
-    c.execute("SELECT * FROM tasks")
+    c.execute(
+        """
+    SELECT
+      t.id,
+      t.description,
+      c.name as category,
+      t.date_added,
+      t.date_completed,
+      t.status,
+      t.position
+    FROM tasks t
+    LEFT JOIN categories c ON c.id = t.category_id
+    ;
+    """
+    )
     results = c.fetchall()
     tasks = []
     for result in results:
@@ -20,18 +35,24 @@ def insert_task(task: Task):
     c.execute("SELECT COUNT(1) FROM tasks")
     count = c.fetchone()[0]
     task.position = count if count else 0
+
     with conn:
         c.execute(
-            "INSERT INTO tasks VALUES (:description, :category, :date_added, :date_completed, :status, :position)",
-            {
-                "description": task.description,
-                "category": task.category,
-                "date_added": task.category,
-                "date_completed": task.date_completed,
-                "status": task.status,
-                "position": task.position,
-            },
+            """
+            INSERT INTO tasks (description, category_id, date_added, date_completed, status, position)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                task.description,
+                task.category_id,
+                task.date_added,
+                task.date_completed,
+                task.status,
+                task.position,
+            ),
         )
+
+        task.id = c.lastrowid
 
 
 def delete_task(position: int):
