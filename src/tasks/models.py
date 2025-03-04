@@ -1,28 +1,29 @@
-import datetime
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Optional
 
 
+@dataclass
 class Task:
-    def __init__(
-        self,
-        id=None,
-        description="",
-        category_id=None,
-        date_added=None,
-        date_completed=None,
-        status=None,
-        position=None,
-    ) -> None:
-        self.id = id
-        self.description = description
-        self.category_id = category_id
-        self.date_added = (
-            date_added
-            if date_added is not None
-            else datetime.datetime.now().isoformat()
-        )
-        self.date_completed = date_completed if date_completed is not None else None
-        self.status = status if status is not None else 0  # 0 = pending, 1 = completed
-        self.position = position if position is not None else None
+    id: Optional[int] = None
+    title: str = ""
+    category_id: Optional[int] = None
+    date_added: str = field(default_factory=lambda: datetime.now().isoformat())
+    date_completed: Optional[str] = None
+    status: int = 0
+    position: Optional[int] = None
 
-    def __repr__(self) -> str:
-        return f"({self.description}, {self.category_id}, {self.date_added}, {self.date_completed}, {self.status}, {self.position})"
+    def __post_init__(self):
+        """Asegura que los valores sean correctos"""
+        self.date_completed = self.date_completed or None
+        self.status = self.status or 0
+        self.position = self.position or None
+
+
+@dataclass
+class PendingTaskDTO:
+    position: Optional[int]
+    title: str
+    category_name: str
+    date_added: str
+    tracking: int = 0

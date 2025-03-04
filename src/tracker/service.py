@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
 
+from src.tasks.service import get_task_id_from_position
 from src.tracker.models import ActiveTimer
 
 
@@ -8,8 +9,10 @@ conn = sqlite3.connect("tasks.db")
 c = conn.cursor()
 
 
-def insert_time_tracking(task_id: int):
+def insert_time_tracking(position: int):
     start_time = datetime.now().isoformat()
+
+    task_id = get_task_id_from_position(position)
 
     with conn:
         c.execute(
@@ -21,8 +24,10 @@ def insert_time_tracking(task_id: int):
         )
 
 
-def stop_time_tracking(task_id: int):
+def stop_time_tracking(position: int):
     end_time = datetime.now().isoformat()
+
+    task_id = get_task_id_from_position(position)
 
     with conn:
         c.execute(
@@ -46,6 +51,7 @@ def get_active_timer():
 
     Returns:
         list: A list of tuples, each containing:
+            - position (int): The position of the task on the list of tasks.
             - task (str): The description of the task.
             - category (str): The name of the category associated with the task.
             - start_time (str): The start time of the timer in ISO format.
@@ -57,7 +63,8 @@ def get_active_timer():
     c.execute(
         """
         SELECT
-          t.description as task,
+          t.position as position,
+          t.title as task,
           c.name as category,
           tt.start_time,
           datetime('now', 'localtime') as current_time,
@@ -75,12 +82,13 @@ def get_active_timer():
 
     if result:
         return ActiveTimer(
-            task=result[0],
-            category=result[1],
-            start_time=datetime.fromisoformat(result[2]),
-            current_time=datetime.fromisoformat(result[3]),
-            elapsed_time_seconds=result[4],
-            elapsed_time_minutes=result[5],
+            position=result[0],
+            task=result[1],
+            category=result[2],
+            start_time=datetime.fromisoformat(result[3]),
+            current_time=datetime.fromisoformat(result[4]),
+            elapsed_time_seconds=result[5],
+            elapsed_time_minutes=result[6],
         )
 
     return None

@@ -12,7 +12,16 @@ from src.tracker.service import (
 from src.tracker.models import ActiveTimer
 
 console = Console()
-tracker_app = typer.Typer()
+tracker_app = typer.Typer(invoke_without_command=True)
+
+
+@tracker_app.callback()
+def main(ctx: typer.Context):
+    """
+    Default command when `tracker` is called without arguments.
+    """
+    if ctx.invoked_subcommand is None:
+        active()
 
 
 @tracker_app.command(short_help="Start time tracking for a task")
@@ -40,12 +49,14 @@ def active():
     """
     active_timer: Optional[ActiveTimer] = get_active_timer()
 
-    console.print("[bold magenta]Active Timer[/bold magenta]", "⌛")
     if active_timer is None:
         console.print("[bold red]No active timers.[/bold red]")
         return
 
+    console.print("[bold magenta]Active Timer[/bold magenta]", "⌛")
+
     table = Table(show_header=True, header_style="bold blue")
+    table.add_column("#", style="dim", width=3)
     table.add_column("Task", style="dim", min_width=15)
     table.add_column("Category", min_width=12)
     table.add_column("Start Time")
@@ -55,6 +66,7 @@ def active():
 
     c = get_category_color(active_timer.category)
     table.add_row(
+        str(active_timer.position),
         active_timer.task,
         f"[{c}]{active_timer.category}[/{c}]",
         active_timer.start_time.isoformat(),
@@ -63,3 +75,7 @@ def active():
         str(round(active_timer.elapsed_time_minutes, 2)),
     )
     console.print(table)
+
+
+if __name__ == "__main__":
+    tracker_app()

@@ -13,12 +13,13 @@ def create_tasks_table():
         """
         CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        description TEXT,
+        title TEXT,
         category_id INTEGER,
         date_added TEXT,
         date_completed TEXT,
         status INTEGER,
         position INTEGER,
+        deleted INTEGER DEFAULT 0, --soft delete (0 = active, 1 = deleted)
 
         FOREIGN KEY (category_id) REFERENCES categories(id)
         ) STRICT;

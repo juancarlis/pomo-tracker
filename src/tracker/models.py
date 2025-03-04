@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 @dataclass
 class ActiveTimer:
+    position: int
     task: str
     category: str
     start_time: datetime

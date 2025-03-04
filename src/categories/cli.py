@@ -11,6 +11,15 @@ console = Console()
 categories_app = typer.Typer()
 
 
+@categories_app.callback(invoke_without_command=True)
+def main(ctx: typer.Context):
+    """
+    Default command when `task` is called without arguments.
+    """
+    if ctx.invoked_subcommand is None:
+        show()
+
+
 @categories_app.command(short_help="show all categories")
 def show():
     categories = get_all_categories()
