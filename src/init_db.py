@@ -1,8 +1,9 @@
 import logging
-import sqlite3
+
+from src.database import get_connection
 
 
-conn = sqlite3.connect("tasks.db")
+conn = get_connection()
 c = conn.cursor()
 
 DB_PATH = "tasks.db"
