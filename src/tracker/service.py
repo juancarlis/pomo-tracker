@@ -1,11 +1,11 @@
-import sqlite3
 from datetime import datetime
 
+from src.database import get_connection
 from src.tasks.service import get_task_id_from_position
 from src.tracker.models import ActiveTimer
 
 
-conn = sqlite3.connect("tasks.db")
+conn = get_connection()
 c = conn.cursor()
 
 

@@ -1,3 +1,4 @@
+import time
 from typing import Optional
 from src.tasks.cli import get_category_color
 import typer

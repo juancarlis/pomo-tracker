@@ -129,6 +129,7 @@ def pending():
         },
         emoji="⌛",
     )
+    return 0
 
 
 def get_category_color(category):

@@ -1,10 +1,10 @@
-import sqlite3
 from typing import List, Optional
 
 from src.categories.models import Category
+from src.database import get_connection
 
 
-conn = sqlite3.connect("tasks.db")
+conn = get_connection()
 c = conn.cursor()
 
 

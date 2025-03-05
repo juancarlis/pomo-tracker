@@ -53,7 +53,7 @@ def insert_default_categories():
         ;
         """
     )
-    logging.info(f"Tasks categories populated")
+    logging.info("Tasks categories populated")
 
 
 def create_time_tracking_table():
@@ -71,12 +71,29 @@ def create_time_tracking_table():
     logging.info(f"Time tracking table created at {DB_PATH}")
 
 
+def create_alarms_table():
+    c.execute(
+        """
+        CREATE TABLE IF NOT EXISTS alarms (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            duration INTEGER NOT NULL,
+            start_time TEXT NOT NULL,
+            end_time TEXT NOT NULL,
+            status TEXT CHECK(status IN ('pending', 'finished', 'stopped')) DEFAULT 'pending',
+            recurring INTEGER NOT NULL DEFAULT 0 -- 0 = no recurrente, 1 = recurrente
+        );
+        """
+    )
+    logging.info(f"Alarms table created at {DB_PATH}")
+
+
 def create_database():
 
     create_tasks_table()
     create_categories_table()
     insert_default_categories()
     create_time_tracking_table()
+    create_alarms_table()
 
     conn.commit()
     conn.close()

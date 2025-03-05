@@ -1,10 +1,9 @@
-import sqlite3
 from typing import List, Optional
 import datetime
+from src.database import get_connection
 from src.tasks.models import PendingTaskDTO, Task
-from src.categories.service import get_category_id_from_name
 
-conn = sqlite3.connect("tasks.db")
+conn = get_connection()
 c = conn.cursor()
 
 
