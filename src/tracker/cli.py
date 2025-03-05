@@ -1,5 +1,6 @@
 import time
 from typing import Optional
+from src.alarm.service import insert_alarm
 from src.tasks.cli import get_category_color
 import typer
 from rich.console import Console
@@ -11,9 +12,12 @@ from src.tracker.service import (
     stop_time_tracking,
 )
 from src.tracker.models import ActiveTimer
+from src.alarm.cli import start as start_alarm
 
 console = Console()
 tracker_app = typer.Typer(invoke_without_command=True)
+
+RECURRING_DEFAULT_IN_TIMER = True
 
 
 @tracker_app.callback()
@@ -26,12 +30,22 @@ def main(ctx: typer.Context):
 
 
 @tracker_app.command(short_help="Start time tracking for a task")
-def start(task_id: int):
+def start(
+    task_id: int,
+    timer: int = typer.Option(None, help="Set a timer in minutes"),
+    recurring: bool = RECURRING_DEFAULT_IN_TIMER,
+):
     """
     Starts tracking a task
     """
-    typer.echo(f"⏳ Timer starts for task {task_id}...")
     insert_time_tracking(task_id)
+
+    if timer:
+        start_alarm(duration=timer, recurring=recurring)
+
+    console.print(
+        f"[bold green]✅ Task tracking started for task {task_id}.[/bold green]"
+    )
 
 
 @tracker_app.command(short_help="Stop time tracking a task")

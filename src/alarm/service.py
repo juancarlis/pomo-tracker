@@ -1,8 +1,17 @@
+import subprocess
 from datetime import datetime, timedelta
 from src.database import get_connection
 
 conn = get_connection()
 c = conn.cursor()
+
+
+def start_alarm_process():
+    subprocess.Popen(
+        ["python3", "src/alarm/check_alarms.py"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
 
 
 def insert_alarm(duration: int, recurring: bool):

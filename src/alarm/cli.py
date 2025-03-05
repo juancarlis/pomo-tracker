@@ -2,16 +2,18 @@ from datetime import datetime
 from src.alarm.service import (
     get_active_alarms,
     insert_alarm,
+    start_alarm_process,
     stop_alarm_by_id,
     stop_all_alarms,
 )
 import typer
-import subprocess
 from rich.console import Console
 
 
 console = Console()
 alarm_app = typer.Typer(invoke_without_command=True)
+
+RECURRING_DEFAULT = False
 
 
 @alarm_app.callback()
@@ -21,7 +23,7 @@ def main(ctx: typer.Context):
 
 
 @alarm_app.command(short_help="Start a standalone alarm")
-def start(duration: int, recurring: bool = False):
+def start(duration: int, recurring: bool = RECURRING_DEFAULT):
     """
     Initiates an alarm of `duration` minutes.
     """
@@ -36,11 +38,7 @@ def start(duration: int, recurring: bool = False):
 
     typer.echo(f"Alarm {alarm_id} set in {duration} minutes.")
 
-    subprocess.Popen(
-        ["python3", "src/alarm/check_alarms.py"],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
+    start_alarm_process()
 
 
 @alarm_app.command(short_help="Stop an alarm")
