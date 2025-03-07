@@ -9,5 +9,4 @@ class ActiveTimer:
     category: str
     start_time: datetime
     current_time: datetime
-    elapsed_time_seconds: float
-    elapsed_time_minutes: float
+    elapsed_time: str

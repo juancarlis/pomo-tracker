@@ -76,18 +76,16 @@ def active():
     table.add_column("Category", min_width=12)
     table.add_column("Start Time")
     table.add_column("Current Time")
-    table.add_column("Elapsed (sec)")
-    table.add_column("Elapsed (min)")
+    table.add_column("Elapsed [HH:MM:SS]")
 
     c = get_category_color(active_timer.category)
     table.add_row(
         str(active_timer.position),
         active_timer.task,
         f"[{c}]{active_timer.category}[/{c}]",
-        active_timer.start_time.isoformat(),
-        active_timer.current_time.isoformat(),
-        str(round(active_timer.elapsed_time_seconds, 2)),
-        str(round(active_timer.elapsed_time_minutes, 2)),
+        active_timer.start_time.strftime("%Y-%m-%d %H:%M"),
+        active_timer.current_time.strftime("%Y-%m-%d %H:%M"),
+        active_timer.elapsed_time,
     )
     console.print(table)
 
