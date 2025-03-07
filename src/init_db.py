@@ -1,12 +1,10 @@
 import logging
 
-from src.database import get_connection
+from src.database import DB_PATH, get_connection
 
 
 conn = get_connection()
 c = conn.cursor()
-
-DB_PATH = "tasks.db"
 
 
 def create_tasks_table():

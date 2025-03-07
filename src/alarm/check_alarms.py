@@ -1,3 +1,4 @@
+import os
 import time
 import subprocess
 from datetime import datetime
@@ -9,11 +10,12 @@ from src.alarm.service import get_active_alarms, mark_alarm_as_finished
 
 console = Console()
 NOTIFY_EVERY = 120
+NOTIFY_APP = "wsl-notify-send.exe"
 
 
 def notify_user(message: str):
     try:
-        subprocess.run(["wsl-notify-send.exe", message], check=True)
+        subprocess.run([NOTIFY_APP, message], check=True)
     except FileNotFoundError:
         console.print(
             f"[bold red]{message} (Instala wsl-notify-send para recibir notificaciones.)"
