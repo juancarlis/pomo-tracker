@@ -35,7 +35,7 @@ def get_pending_tasks() -> List[PendingTaskDTO]:
     c.execute(
         """
         SELECT
-          t.position,
+          DISTINCT(t.position),
           t.title,
           c.name as category_name,
           t.date_added,
@@ -45,7 +45,7 @@ def get_pending_tasks() -> List[PendingTaskDTO]:
             ELSE NULL
           END AS tracking
         FROM tasks t
-        LEFT JOIN categories c ON c.id = t.category_id
+        LEFT JOIN categories c ON c.id = t.category_id 
         LEFT JOIN time_tracking tt ON tt.task_id = t.id
         WHERE 1=1
           AND deleted = 0
