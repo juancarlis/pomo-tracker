@@ -137,19 +137,15 @@ poetry run taskcli alarm stop_all
 
 ## Notifications
 
-Pomo Tracker uses `wsl-notify-send` for alarm notifications on WSL2. Install it with:
-
-```bash
-winget install wsl-notify-send
-```
+Pomo Tracker uses `wsl-notify-send` for alarm notifications on WSL2.
 
 If `wsl-notify-send` is not available, the CLI will print alerts instead.
 
 ## Future Improvements
 
 - Export task reports
-- GUI integration
-- Sync with online calendars
+- Todoist integration
+- JIRA integration
 
 ## License
 
