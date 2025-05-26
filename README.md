@@ -43,6 +43,46 @@ them, and set alarms to keep you on schedule.
    poetry run taskcli --help
    ```
 
+## Development with uv
+
+This project supports `uv` as an alternative to Poetry for dependency management
+and running project commands. `uv` is a fast Python package installer and
+resolver, written in Rust.
+
+### Installing uv
+
+You can install `uv` using pip:
+
+```bash
+pip install uv
+```
+
+Or, for more installation options, refer to the
+[official uv installation guide](https://github.com/astral-sh/uv#installation).
+
+### Installing Dependencies
+
+To install project dependencies using `uv`, run the following command from the
+project root:
+
+```bash
+uv pip sync pyproject.toml
+```
+
+This command will install all dependencies specified in the `pyproject.toml`
+file into your current virtual environment.
+
+### Running Project Commands
+
+You can use `uv run` to execute commands defined in your `pyproject.toml` (such
+as scripts or your main application). For example, to run the `taskcli` tool:
+
+```bash
+uv run taskcli --help
+```
+
+This is equivalent to `poetry run taskcli --help`.
+
 ## Usage
 
 ### Task Management
