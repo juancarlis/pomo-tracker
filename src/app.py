@@ -1,10 +1,10 @@
 import typer
-from src.tasks.cli import task_app
-from src.categories.cli import categories_app
-from src.tracker.cli import tracker_app
-from src.alarm.cli import alarm_app
-from src.setup import setup_app
-from src.utils.cli import utils_app
+from tasks.cli import task_app
+from categories.cli import categories_app
+from tracker.cli import tracker_app
+from alarm.cli import alarm_app
+from setup import setup_app
+from utils.cli import utils_app
 
 app = typer.Typer()
 

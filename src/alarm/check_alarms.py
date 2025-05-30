@@ -1,11 +1,10 @@
-import os
 import time
 import subprocess
 from datetime import datetime
 
 from rich.console import Console
 
-from src.alarm.service import get_active_alarms, mark_alarm_as_finished
+from alarm.service import get_active_alarms, mark_alarm_as_finished
 
 
 console = Console()

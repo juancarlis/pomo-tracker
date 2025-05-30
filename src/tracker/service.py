@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from src.database import get_connection
-from src.tasks.service import get_task_id_from_position
-from src.tracker.models import ActiveTimer
+from database import get_connection
+from tasks.service import get_task_id_from_position
+from tracker.models import ActiveTimer
 
 
 conn = get_connection()

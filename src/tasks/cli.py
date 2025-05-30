@@ -1,18 +1,27 @@
-from src.categories.service import get_all_categories, get_category_id_from_name
-from src.tasks.models import Task
-from src.utils.date_funcs import format_date_to_min
-from src.utils.display import display_table
+import os
+import tempfile
+import subprocess
+
+from categories.service import get_all_categories, get_category_id_from_name
+from tasks.models import Task
+from utils.date_funcs import format_date_to_min
+from utils.display import display_table
 import typer
 from rich.console import Console
 from rich.table import Table
 
-from src.tasks.service import (
+from settings import settings
+from tasks.service import (
     get_all_tasks,
     delete_task,
     get_pending_tasks,
+    get_task_content,
+    get_task_id_from_position,
     insert_task,
     complete_task,
+    insert_task_content,
     update_task,
+    update_task_content,
 )
 
 
@@ -30,7 +39,11 @@ def main(ctx: typer.Context):
 
 
 @task_app.command(short_help="add an item")
-def add(title: str, category: str):
+def add(title: str, category: str = typer.Argument(None)):
+
+    if not category:
+        category = settings.default_category
+
     category_id = get_category_id_from_name(category)
     if category_id is None:
         typer.echo(
@@ -130,6 +143,37 @@ def pending():
         emoji="⌛",
     )
     return 0
+
+
+@task_app.command("edit-content")
+def edit_content(position: int):
+    """Edit task content $EDITOR."""
+    task_id = get_task_id_from_position(position)
+    if task_id is None:
+        typer.echo(f"No task found at position {position}.")
+        raise typer.Exit(1)
+
+    current_content = get_task_content(task_id) or ""
+
+    with tempfile.NamedTemporaryFile(suffix=".md", delete=False, mode="w+") as tmp:
+        tmp.write(current_content)
+        tmp.flush()
+        tmp_path = tmp.name
+
+    editor = os.environ.get("EDITOR", "nvim")
+    subprocess.call([editor, tmp_path])
+
+    with open(tmp_path, "r", encoding="utf-8") as f:
+        new_content = f.read()
+
+    os.unlink(tmp_path)
+
+    if current_content:
+        update_task_content(task_id, new_content)
+        typer.echo("Content updated.")
+    else:
+        insert_task_content(task_id, new_content)
+        typer.echo("Content created.")
 
 
 def get_category_color(category):

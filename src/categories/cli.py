@@ -1,10 +1,10 @@
 import typer
-from src.categories.models import Category
+from categories.models import Category
 from rich.console import Console
 from rich.table import Table
 
 
-from src.categories.service import get_all_categories
+from categories.service import get_all_categories
 
 
 console = Console()

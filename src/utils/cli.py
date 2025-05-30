@@ -3,7 +3,7 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
-from src.utils.export_csv import export_table_to_csv
+from utils.export_csv import export_table_to_csv
 
 
 console = Console()

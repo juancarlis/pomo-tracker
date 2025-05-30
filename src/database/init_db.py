@@ -1,57 +1,37 @@
 import logging
 
-from src.database import DB_PATH, get_connection
+from database import DB_PATH, get_connection
+from database.database import execute
+from database.queries import (
+    DDL_CREATE_CATEGORIES_TABLE,
+    DDL_CREATE_TASKS_CONTENT_TABLE,
+    DDL_CREATE_TASKS_TABLE,
+    INSERT_DEFAULT_CATEGORIES,
+)
 
 
 conn = get_connection()
 c = conn.cursor()
 
+TABLE_TASKS = "tasks"
+TABLE_CATEGORIES = "categories"
+TABLE_TRACKER = "time_tracking"
+TABLE_ALARMS = "alarms"
+TABLE_CONTENTS = "table_contents"
+
 
 def create_tasks_table():
-    c.execute(
-        """
-        CREATE TABLE IF NOT EXISTS tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        category_id INTEGER,
-        date_added TEXT,
-        date_completed TEXT,
-        status INTEGER,
-        position INTEGER,
-        deleted INTEGER DEFAULT 0, --soft delete (0 = active, 1 = deleted)
-
-        FOREIGN KEY (category_id) REFERENCES categories(id)
-        ) STRICT;
-    """
-    )
+    execute(DDL_CREATE_TASKS_TABLE)
     logging.info(f"Tasks table created at {DB_PATH}")
 
 
 def create_categories_table():
-    c.execute(
-        """
-        CREATE TABLE IF NOT EXISTS categories (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        color TEXT
-        );
-        """
-    )
+    execute(DDL_CREATE_CATEGORIES_TABLE)
     logging.info(f"Tasks categories created at {DB_PATH}")
 
 
 def insert_default_categories():
-    c.execute(
-        """
-        INSERT INTO categories (id, name, color)
-        VALUES  (1, "Work", "red"),
-                (2, "Research", "cyan"),
-                (3, "Study", "green"),
-                (4, "Side Projects", "yellow"),
-                (5, "Personal", "blue")
-        ;
-        """
-    )
+    execute(INSERT_DEFAULT_CATEGORIES)
     logging.info("Tasks categories populated")
 
 
@@ -86,10 +66,24 @@ def create_alarms_table():
     logging.info(f"Alarms table created at {DB_PATH}")
 
 
+def create_tasks_contents_table():
+    execute(DDL_CREATE_TASKS_CONTENT_TABLE)
+    logging.info("Tasks contents table created")
+
+
+def create_context_table():
+    c.execute(
+        """
+
+    """
+    )
+
+
 def create_database():
 
     create_tasks_table()
     create_categories_table()
+    create_tasks_contents_table()
     insert_default_categories()
     create_time_tracking_table()
     create_alarms_table()

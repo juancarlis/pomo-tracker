@@ -1,6 +1,6 @@
 import csv
 from typing import Any, List
-from src.database import get_connection
+from database import get_connection
 
 
 def export_table_to_csv(table_name: str, csv_path: str) -> None:
