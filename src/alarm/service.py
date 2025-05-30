@@ -1,7 +1,7 @@
 import sys
 import subprocess
 from datetime import datetime, timedelta
-from src.database import get_connection
+from database import get_connection
 
 conn = get_connection()
 c = conn.cursor()
@@ -9,7 +9,7 @@ c = conn.cursor()
 
 def start_alarm_process():
     subprocess.Popen(
-        [sys.executable, "-m", "src.alarm.check_alarms"],
+        [sys.executable, "-m", "alarm.check_alarms"],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )

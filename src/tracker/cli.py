@@ -1,18 +1,16 @@
-import time
 from typing import Optional
-from src.alarm.service import insert_alarm
-from src.tasks.cli import get_category_color
+from tasks.cli import get_category_color
 import typer
 from rich.console import Console
 from rich.table import Table
 
-from src.tracker.service import (
+from tracker.service import (
     get_active_timer,
     insert_time_tracking,
     stop_time_tracking,
 )
-from src.tracker.models import ActiveTimer
-from src.alarm.cli import start as start_alarm
+from tracker.models import ActiveTimer
+from alarm.cli import start as start_alarm
 
 console = Console()
 tracker_app = typer.Typer(invoke_without_command=True)
@@ -76,18 +74,16 @@ def active():
     table.add_column("Category", min_width=12)
     table.add_column("Start Time")
     table.add_column("Current Time")
-    table.add_column("Elapsed (sec)")
-    table.add_column("Elapsed (min)")
+    table.add_column("Elapsed [HH:MM:SS]")
 
     c = get_category_color(active_timer.category)
     table.add_row(
         str(active_timer.position),
         active_timer.task,
         f"[{c}]{active_timer.category}[/{c}]",
-        active_timer.start_time.isoformat(),
-        active_timer.current_time.isoformat(),
-        str(round(active_timer.elapsed_time_seconds, 2)),
-        str(round(active_timer.elapsed_time_minutes, 2)),
+        active_timer.start_time.strftime("%Y-%m-%d %H:%M"),
+        active_timer.current_time.strftime("%Y-%m-%d %H:%M"),
+        active_timer.elapsed_time,
     )
     console.print(table)
 

@@ -1,7 +1,11 @@
 from typing import List, Optional
 
-from src.categories.models import Category
-from src.database import get_connection
+from categories.models import Category
+from categories.queries import (
+    SELECT_CATEGORY_ID_FROM_ID,
+    SELECT_CATEGORY_ID_FROM_NAME,
+)
+from database import fetch_one, get_connection
 
 
 conn = get_connection()
@@ -27,3 +31,23 @@ def get_category_id_from_name(category_name: str) -> Optional[int]:
 
     result = c.fetchone()
     return result[0] if result else None
+
+
+def get_category_id_from_name_or_id(category: str) -> Optional[int]:
+    """
+    Gets the category id from a category name or an id in string format.
+    """
+
+    try:
+        category_id = int(category)
+        return fetch_one(
+            query=SELECT_CATEGORY_ID_FROM_ID,
+            mapper=lambda row: row[0],
+            params=(category_id,),
+        )
+    except ValueError:
+        return fetch_one(
+            query=SELECT_CATEGORY_ID_FROM_NAME,
+            mapper=lambda row: row[0],
+            params=(category,),
+        )

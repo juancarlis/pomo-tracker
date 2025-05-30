@@ -1,6 +1,6 @@
 import typer
 import subprocess
-from src.init_db import create_database
+from database.init_db import create_database
 
 setup_app = typer.Typer()
 

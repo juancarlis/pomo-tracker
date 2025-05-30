@@ -1,0 +1,3 @@
+SELECT_CATEGORY_ID_FROM_ID = "SELECT id FROM categories WHERE id = ?;"
+
+SELECT_CATEGORY_ID_FROM_NAME = "SELECT id FROM categories WHERE name = ?;"

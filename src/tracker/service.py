@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from src.database import get_connection
-from src.tasks.service import get_task_id_from_position
-from src.tracker.models import ActiveTimer
+from database import get_connection
+from tasks.service import get_task_id_from_position
+from tracker.models import ActiveTimer
 
 
 conn = get_connection()
@@ -68,8 +68,11 @@ def get_active_timer():
           c.name as category,
           tt.start_time,
           datetime('now', 'localtime') as current_time,
-          (julianday('now', 'localtime') - julianday(tt.start_time)) * 86400 as elapsed_time_seconds,
-          (julianday('now', 'localtime') - julianday(tt.start_time)) * 1440 as elapsed_time_minutes
+          printf('%02d:%02d:%02d',
+          (CAST((julianday(datetime('now', 'localtime')) - julianday(tt.start_time)) * 86400 AS INTEGER) / 3600) % 24,
+          (CAST((julianday(datetime('now', 'localtime')) - julianday(tt.start_time)) * 86400 AS INTEGER) / 60) % 60,
+          (CAST((julianday(datetime('now', 'localtime')) - julianday(tt.start_time)) * 86400 AS INTEGER) % 60)
+            ) as elapsed_time
         FROM time_tracking tt
         LEFT JOIN tasks t ON t.id = tt.task_id
         LEFT JOIN categories c ON c.id = t.category_id
@@ -87,8 +90,7 @@ def get_active_timer():
             category=result[2],
             start_time=datetime.fromisoformat(result[3]),
             current_time=datetime.fromisoformat(result[4]),
-            elapsed_time_seconds=result[5],
-            elapsed_time_minutes=result[6],
+            elapsed_time=result[5],
         )
 
     return None

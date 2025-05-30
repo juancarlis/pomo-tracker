@@ -1,5 +1,5 @@
 from datetime import datetime
-from src.alarm.service import (
+from alarm.service import (
     get_active_alarms,
     insert_alarm,
     start_alarm_process,
@@ -77,7 +77,7 @@ def list():
 
 
 def clean():
-    from src.alarm.service import clean_finished_alarms
+    from alarm.service import clean_finished_alarms
 
     clean_finished_alarms()
     console.print("[bold green]Finished alarms deleted.[/bold green]")

@@ -20,7 +20,7 @@ them, and set alarms to keep you on schedule.
 ### Prerequisites
 
 - Python 3.12+
-- [Poetry](https://python-poetry.org/docs/)
+- [uv](https://docs.astral.sh/uv/guides/install-python/)
 - (Optional) `wsl-notify-send` for Windows notifications inside WSL2
 
 ### Steps
@@ -32,15 +32,15 @@ them, and set alarms to keep you on schedule.
    ```
 2. Install dependencies:
    ```bash
-   poetry install
+   uv install
    ```
 3. Initialize the database:
    ```bash
-   poetry run init-db
+   uv run init-db
    ```
 4. Start using the CLI:
    ```bash
-   poetry run taskcli --help
+   uv run taskcli --help
    ```
 
 ## Usage
@@ -50,22 +50,22 @@ them, and set alarms to keep you on schedule.
 #### Add a task
 
 ```bash
-poetry run taskcli task add "Write documentation" Work
+uv run taskcli task add "Write documentation" Work
 ```
 #### Show tasks
 
 ```bash
-poetry run taskcli task show
+uv run taskcli task show
 ```
 #### Complete a task
 
 ```bash
-poetry run taskcli task complete 1
+uv run taskcli task complete 1
 ```
 #### Delete a task
 
 ```bash
-poetry run taskcli task delete 1
+uv run taskcli task delete 1
 ```
 
 ### Time Tracking
@@ -73,22 +73,22 @@ poetry run taskcli task delete 1
 #### Start tracking a task
 
 ```bash
-poetry run taskcli tracker start 1
+uv run taskcli tracker start 1
 ```
 #### Start tracking with an alarm
 
 ```bash
-poetry run taskcli tracker start 1 --timer 25 --recurring
+uv run taskcli tracker start 1 --timer 25 --recurring
 ```
 #### Stop tracking
 
 ```bash
-poetry run taskcli tracker stop 1
+uv run taskcli tracker stop 1
 ```
 #### Show active timers
 
 ```bash
-poetry run taskcli tracker active
+uv run taskcli tracker active
 ```
 
 ### Alarms
@@ -96,22 +96,22 @@ poetry run taskcli tracker active
 #### Set an alarm
 
 ```bash
-poetry run taskcli alarm start 5
+uv run taskcli alarm start 5
 ```
 #### List active alarms
 
 ```bash
-poetry run taskcli alarm list
+uv run taskcli alarm list
 ```
 #### Stop an alarm
 
 ```bash
-poetry run taskcli alarm stop 1
+uv run taskcli alarm stop 1
 ```
 #### Stop all alarms
 
 ```bash
-poetry run taskcli alarm stop_all
+uv run taskcli alarm stop_all
 ```
 
 ## Architecture
