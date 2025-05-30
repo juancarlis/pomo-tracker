@@ -1,24 +1,33 @@
-[tool.poetry]
+[project]
 name = "pomo-tracker"
 version = "0.1.0"
 description = ""
-packages = [{ include = "src", from = "." }]
-authors = ["Juan I. Carlis <juancarlis93@gmail.com>"]
 readme = "README.md"
+requires-python = ">=3.12"
 
-[tool.poetry.dependencies]
-python = "^3.12"
-rich = "^13.9.4"
-typer = "^0.15.2"
+# Authors must be tables with name+email per PEP 621:
+authors = [
+  { name = "Juan I. Carlis", email = "juancarlis93@gmail.com" },
+]
 
+# Runtime dependencies
+dependencies = [
+  "rich>=13.9.4",
+  "typer>=0.15.2",
+  "pydantic>=2.10.6",
+  "pyyaml>=6.0.2",
+  "pydantic-settings>=2.8.1",
+]
 
-[tool.poetry.group.dev.dependencies]
-pdbpp = "^0.10.3"
+[project.optional-dependencies]
+dev = [
+  "pdbpp>=0.10.3",
+]
 
-[tool.poetry.scripts]
-taskcli = "src.app:app"
-init-db = "src.init_db:create_database"
+[project.scripts]
+taskcli = "app:app"
+init-db = "database.init_db:create_database"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
