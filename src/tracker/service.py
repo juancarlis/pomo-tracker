@@ -1,9 +1,11 @@
-from datetime import datetime
+from datetime import datetime, date, timedelta
+from typing import List, Optional
 
 from database import get_connection
+from database.database import execute, fetch_all
 from tasks.service import get_task_id_from_position
-from tracker.models import ActiveTimer
-
+from tracker.models import ActiveTimer, DailySummary
+from tracker.queries import STOP_TIME_TRACKING, DAILY_SUMMARY, INSERT_TIME_TRACKING
 
 conn = get_connection()
 c = conn.cursor()
@@ -11,33 +13,16 @@ c = conn.cursor()
 
 def insert_time_tracking(position: int):
     start_time = datetime.now().isoformat()
-
     task_id = get_task_id_from_position(position)
 
-    with conn:
-        c.execute(
-            """
-            INSERT INTO time_tracking (task_id, start_time)
-            VALUES(?, ?)
-            """,
-            (task_id, start_time),
-        )
+    execute(INSERT_TIME_TRACKING, (task_id, start_time))
 
 
 def stop_time_tracking(position: int):
     end_time = datetime.now().isoformat()
-
     task_id = get_task_id_from_position(position)
 
-    with conn:
-        c.execute(
-            """
-            UPDATE time_tracking
-            SET end_time = ?
-            WHERE task_id = ? AND end_time IS NULL
-            """,
-            (end_time, task_id),
-        )
+    execute(STOP_TIME_TRACKING, (end_time, task_id))
 
 
 def get_active_timer():
@@ -109,3 +94,29 @@ def get_task_total_time(task_id: int):
 
     result = c.fetchone()
     return result[0] if result[0] else 0
+
+
+def get_daily_summary(
+    date_str: Optional[str] = "", relative_days: int = 0
+) -> List[DailySummary]:
+    """
+    Fetch tracking summary for a specific day.
+    Either `date_str` (format YYYY-MM-DD) or `relative_days` must be used.
+    If both are default, defaults to today.
+    """
+
+    if date_str and relative_days != 0:
+        raise ValueError("Only one of date_str or relative_days should be provided.")
+
+    if date_str:
+        try:
+            query_date = date.fromisoformat(date_str)
+        except ValueError:
+            raise ValueError("Invalid date format. Use YYYY-MM-DD.")
+    else:
+        query_date = date.today() + timedelta(days=relative_days)
+
+    str_date = query_date.strftime("%Y-%m-%d")
+    return fetch_all(
+        DAILY_SUMMARY, lambda row: DailySummary(*row), params=(str_date, str_date)
+    )
