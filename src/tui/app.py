@@ -1,7 +1,6 @@
 import os
 import tempfile
 import subprocess
-import sys
 
 from loguru import logger
 from textual.app import App, ComposeResult
@@ -18,7 +17,6 @@ from tasks.service import (
     insert_task_content,
     update_task_content,
     get_task_content,
-    get_task_id_from_position,
 )
 from tracker.service import insert_time_tracking, stop_time_tracking
 from categories.service import get_category_id_from_name_or_id
@@ -90,15 +88,8 @@ class AddTaskScreen(Screen):
 
 class TaskApp(App):
 
-    class _ExitAndEdit(Message):
-        """Internal message carrying the task position to edit after exiting the TUI.""" ""
+    selected_row = reactive(0)
 
-        def __init__(self, position: int) -> None:
-            super().__init__()
-            logger.info(f"In _ExitAndEdit {position}")
-            self.position = position
-
-    # CSS_PATH = "styles.css"
     BINDINGS = [
         ("q", "quit", "Quit"),
         ("j", "cursor_down", "Down"),
@@ -111,7 +102,13 @@ class TaskApp(App):
         ("t", "toggle_tracking", "Toggle tracking"),
     ]
 
-    selected_row = reactive(0)
+    def on_load(self) -> None:
+        user_theme = os.getenv("GLOBAL_THEME", "dark").lower()
+        logger.info(f"Theme: {user_theme}")
+        if user_theme == "light":
+            self.theme = "solarized-light"
+        else:
+            self.theme = "nord"
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -247,19 +244,6 @@ class TaskApp(App):
             insert_task_content(pos, new_content)
             logger.info(f"Task {pos} content created")
 
-        self.load_tasks()
-
-    def on__ExitAndEdit(self, message: _ExitAndEdit):
-        subprocess.call(
-            [
-                sys.executable,
-                "-m",
-                "tasks.cli",
-                "task",
-                "edit-content",
-                str(message.position),
-            ]
-        )
         self.exit()
 
     def action_toggle_tracking(self):

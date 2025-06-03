@@ -12,6 +12,7 @@ class AppSettings(BaseSettings):
     """
 
     default_category: str = "Inbox"
+    theme: str = ""
     db_path: str = "~/.config/pomo-tracker/tasks.db"
 
     class Config:
