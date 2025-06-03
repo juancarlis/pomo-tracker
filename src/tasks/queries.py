@@ -56,9 +56,6 @@ COMPLETE_TASKS = """
         ;
 """
 
-# position_old, position_new
-CHANGE_POSITION = "UPDATE tasks SET position = ? WHERE position = ?"
-
 SHIFT_POSITIONS_AFTER_DELETE = """
     UPDATE tasks
         SET position = position - 1

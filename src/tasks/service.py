@@ -99,13 +99,6 @@ def complete_task(position: int):
 
 def _adjust_positions(old_position: int):
     execute(SHIFT_POSITIONS_AFTER_DELETE, (old_position,))
-    # count = fetch_all(COUNT_UNDELETED, lambda row: row[0])[0]
-    # for pos in range(position + 1, count + 1):
-    #     _change_position(pos, pos - 1)
-
-
-# def _change_position(old_position: int, new_position: int):
-#     execute(CHANGE_POSITION, (new_position, old_position))
 
 
 def get_task_content(task_id: Optional[int]) -> Optional[str]:
