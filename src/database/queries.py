@@ -29,7 +29,11 @@ INSERT_DEFAULT_CATEGORIES = """
             (3, "Research", "cyan"),
             (4, "Study", "green"),
             (5, "Side Projects", "yellow"),
-            (6, "Personal", "blue")
+            (6, "Personal", "blue"),
+            (7, "Focus work", "dodger_blue_3"),
+            (8, "Light work", "bright_yellow"),
+            (9, "Hotfix", "bright_red"),
+            (10, "Request", "dark_orange")
     ;
 """
 
